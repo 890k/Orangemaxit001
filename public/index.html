@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Orange Maxit - Get Your Loan Quickly</title>
+
+    <!-- ✅ Telegram SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        :root {
+            --orange-primary: #ff6600;
+            --orange-hover: #e55c00;
+            --bg-color: #e5e5e5;
+            --card-bg: #ffffff;
+            --calc-bg: #f8f9fa;
+            --text-main: #000000;
+            --text-muted: #666666;
+            --slider-track: #dcdcdc;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Top Header Navigation bar */
+        .app-header {
+            width: 100%;
+            background-color: var(--orange-primary);
+            height: 60px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header-title .orange { color: #ffffff; opacity: 0.95; margin-right: 6px; }
+        .header-title .money { color: #000000; }
+
+        .menu-icon {
+            font-size: 26px;
+            cursor: pointer;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .menu-icon span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        /* Card Layout */
+        .card {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 440px;
+            margin: 20px 0 30px;
+            padding: 30px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-title {
+            font-size: 26px;
+            color: var(--text-main);
+            margin: 0 0 12px;
+            text-align: center;
+            font-weight: 800;
+            line-height: 1.25;
+            letter-spacing: -0.3px;
+        }
+
+        .subtext {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 28px;
+            line-height: 1.4;
+        }
+
+        /* Calculator Inner Area Container */
+        .calculator-container {
+            background: var(--calc-bg);
+            border-radius: 12px;
+            padding: 22px 18px 18px;
+            margin-bottom: 24px;
+        }
+
+        .calculator-title {
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 17px;
+            margin-bottom: 22px;
+        }
+
+        .slider-section { 
+            margin-bottom: 22px; 
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #444444;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .accent-text { 
+            color: var(--orange-primary); 
+            font-weight: 800; 
+            font-size: 15px;
+        }
+
+        /* Custom Range Input */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            margin: 10px 0;
+            background: transparent;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: var(--slider-track);
+            border-radius: 3px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: var(--orange-primary);
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: var(--slider-track);
+            border-radius: 3px;
+        }
+
+        input[type=range]::-moz-range-thumb {
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: var(--orange-primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .slider-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #888888;
+            margin-top: 2px;
+        }
+
+        /* Monthly Payment Results */
+        .result-container {
+            background: #ffffff;
+            border: 1px solid #eeeeee;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .result-label {
+            font-size: 15px;
+            color: #333333;
+            font-weight: 500;
+        }
+
+        .result-amount {
+            color: var(--orange-primary);
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .interest-rate-info {
+            text-align: center;
+            font-size: 11px;
+            color: #777777;
+            margin-top: 12px;
+        }
+
+        /* CTA Button */
+        .btn-apply {
+            background: var(--orange-primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            margin-bottom: 28px;
+            transition: background-color 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-apply:active {
+            background-color: var(--orange-hover);
+        }
+
+        /* Features List Section */
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-top: 10px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .feature-icon-svg {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .feature-text {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .feature-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .feature-desc {
+            font-size: 13px;
+            color: #888888;
+        }
+
+        /* Bottom Footer Banner */
+        .footer-banner {
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #666666;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Header Navigation Bar -->
+<div class="app-header">
+    <div style="width: 24px;"></div>
+    <div class="header-title">
+        <span class="orange">Orange</span><span class="money">Maxit</span>
+    </div>
+    <div class="menu-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+<div class="card">
+    <h1 class="main-title">Get Your Loan<br>Quickly</h1>
+    <div class="subtext">Fast Approval • Competitive Rates •<br>Flexible Terms</div>
+
+    <!-- Inside Calculator Box -->
+    <div class="calculator-container">
+        <div class="calculator-title">Loan Simulator</div>
+
+        <!-- Loan Amount Selector -->
+        <div class="slider-section">
+            <div class="slider-header">
+                <span>Loan Amount</span>
+                <span id="valAmt" class="accent-text">SLE 2,500</span>
+            </div>
+            <input type="range" id="amt" min="100" max="50000" step="100" value="2500">
+            <div class="slider-footer">
+                <span>SLE 100</span>
+                <span>SLE 50,000</span>
+            </div>
+        </div>
+
+        <!-- Duration Selector -->
+        <div class="slider-section">
+            <div class="slider-header">
+                <span>Loan Duration</span>
+                <span id="valDur" class="accent-text">12 months</span>
+            </div>
+            <input type="range" id="dur" min="6" max="60" step="1" value="12">
+            <div class="slider-footer">
+                <span>6 months</span>
+                <span>60 months</span>
+            </div>
+        </div>
+
+        <!-- Display Area -->
+        <div class="result-container">
+            <span class="result-label">Monthly Payment</span>
+            <span id="monthly" class="result-amount">SLE 219</span>
+        </div>
+        
+        <div class="interest-rate-info">
+            Interest Rate: 5% per annum
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button class="btn-apply" onclick="goToPage2()">APPLY NOW</button>
+
+    <!-- Bottom Features -->
+    <div class="features-list">
+        <div class="feature-item">
+            <div class="feature-icon-svg">
+                <svg width="28" height="34" viewBox="0 0 24 24" fill="#facc15" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="#eab308" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="feature-text">
+                <span class="feature-title">Fast</span>
+                <span class="feature-desc">Response in 24h</span>
+            </div>
+        </div>
+
+        <div class="feature-item">
+            <div class="feature-icon-svg">💰</div>
+            <div class="feature-text">
+                <span class="feature-title">Low Rates</span>
+                <span class="feature-desc">From 5%/yr</span>
+            </div>
+        </div>
+
+        <div class="feature-item">
+            <div class="feature-icon-svg">🔒</div>
+            <div class="feature-text">
+                <span class="feature-title">Secure</span>
+                <span class="feature-desc">Bank grade</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer-banner">
+    © 2026 Orange Maxit Sierra Leone
+</div>
+
+<script>
+    let calculatedMonthly = 219;
+
+    function formatSLE(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function update() {
+        const amtEl = document.getElementById('amt');
+        const durEl = document.getElementById('dur');
+
+        if (!amtEl || !durEl) return;
+
+        const principal = Number(amtEl.value) || 0;
+        const durationMonths = Number(durEl.value) || 1;
+
+        document.getElementById('valAmt').innerText = `SLE ${formatSLE(principal)}`;
+        document.getElementById('valDur').innerText = `${durationMonths} months`;
+
+        const annualRate = 0.05;
+        const totalInterest = principal * annualRate * (durationMonths / 12);
+        const totalAmount = principal + totalInterest;
+        calculatedMonthly = Math.round(totalAmount / durationMonths);
+
+        document.getElementById('monthly').innerText = `SLE ${formatSLE(calculatedMonthly)}`;
+    }
+
+    function goToPage2() {
+        const amtEl = document.getElementById('amt');
+        const durEl = document.getElementById('dur');
+
+        if (!amtEl || !durEl) return;
+
+        localStorage.setItem('amount', amtEl.value);
+        localStorage.setItem('loan_amount', amtEl.value);
+        localStorage.setItem('loanDuration', durEl.value);
+        localStorage.setItem('loan_term', durEl.value);
+        localStorage.setItem('duration', durEl.value);
+        localStorage.setItem('monthly_repayment', calculatedMonthly);
+
+        window.location.href = "/page2";
+    }
+
+    window.onload = () => {
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        const amtEl = document.getElementById('amt');
+        const durEl = document.getElementById('dur');
+
+        if (amtEl) amtEl.addEventListener('input', update);
+        if (durEl) durEl.addEventListener('input', update);
+
+        update();
+    };
+</script>
+
+</body>
+</html>
